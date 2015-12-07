@@ -1,0 +1,74 @@
+<% content_for :page_title do %>
+    <%= Spree.t(:zopim_settings) %>
+<% end %>
+
+<p>
+  You can signup for Zopim <a href="http://www.zopim.com" target="_blank">here</a>
+</p>
+
+<%= form_tag admin_zopim_setting_path, method: :put, id: "zopim-settings-form" do |f| %>
+    <fieldset>
+      <div data-hook="admin_zopim_setting_form_fields">
+
+        <div class="row">
+
+          <div class="col-md-4">
+            <div class="checkbox">
+              <%= label_tag :enable_zopim_chat do %>
+                  <%= preference_field_tag :enabled, Spree::ZopimSettings.new[:enabled], type: :boolean %>
+                  <%= Spree.t(:enabled) %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+
+            <div class="form-group">
+              <%= label_tag "Zopim Api Key" %>
+              <%= text_field_tag :api_key, Spree::ZopimSettings.new[:api_key], class: 'form-control' %>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-actions actions" data-hook="buttons"><%= button Spree.t('actions.update'), 'update' %></div>
+    </fieldset>
+<% end %>
+
+<br>
+<h3>How to get your Zopim API Key</h3>
+<ul>
+<li>Log on to <a href="http://www.zopim.com" target="_blank">Zopim</a></li>
+<li>Click on 'Widget' from the left menu</li>
+<li>Copy the API key from the script text as shown in the image below</li>
+</ul>
+
+<br>
+
+<%=image_tag(asset_path 'zopim_api_key.jpg' )%>
+
+<script>
+    $(document).ready(function () {
+        var enabled_check_box = $("#enabled");
+        var api_key_text_field = $("#api_key");
+        var update_api_text_field = function(enabled){
+            if(enabled)
+                api_key_text_field.removeAttr("disabled");
+            else
+                api_key_text_field.attr("disabled", "disabled");
+        }
+
+        update_api_text_field(enabled_check_box.is(':checked'))
+
+
+
+        enabled_check_box.on('click', function(){
+            update_api_text_field(enabled_check_box.is(':checked'))
+
+        });
+
+    });
+</script>
